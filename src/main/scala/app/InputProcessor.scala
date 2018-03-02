@@ -8,7 +8,7 @@ class InputProcessor (handSize: Int = 5, deckTopSize: Int = 5) {
     val front = "^[2-9TJQKA]"
     val back = "[CDHS]$"
 
-    require((front + back).r.findFirstIn(input) != None, "You have to use a standard 52-card 4-suit deck!")
+    require((front + back).r.findFirstIn(input).isDefined, "You have to use a standard 52-card 4-suit deck!")
 
     val faceValue = FaceValues.values.filter(front.r.findFirstIn(input).get == _.toString).head
     val suit = Suits.values.filter(back.r.findFirstIn(input).get == _.toString).head

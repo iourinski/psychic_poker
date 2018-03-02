@@ -5,7 +5,7 @@ import org.scalatest.FunSuite
 
 class CardTest extends FunSuite {
   val processor = new InputProcessor(5, 5)
-  val queen = processor.initializeCard("QH")
+  val queen: Card = processor.initializeCard("QH")
   val init: String => Card = processor.initializeCard
 
   test("we can initialize a card") {
@@ -14,7 +14,7 @@ class CardTest extends FunSuite {
 
   test("we dismiss bad cards") {
     try {
-      val badCard = processor.initializeCard("GH")
+      processor.initializeCard("GH")
     } catch {
       case e: Throwable => println(e.getMessage)
         assert(e.isInstanceOf[IllegalArgumentException])
@@ -33,7 +33,7 @@ class CardTest extends FunSuite {
 
   test("card of different suites do not compare (always false)") {
     val jackOfSpades = init("JS")
-    assert((queen > jackOfSpades) == false)
+    assert(!(queen > jackOfSpades))
   }
 
   test("ace can be below two") {
@@ -48,13 +48,12 @@ class CardTest extends FunSuite {
     assert(sortedCards.reverse.head.faceValue == FaceValues.Ace)
   }
 
-  test("can figure out a straght flush") {
+  test("can figure out a straight flush") {
     val cards = List("QH", "JS", "5H", "3C", "AD", "2C", "4C", "5C", "AC").map(x => init(x))
     assert(StraightFlush.isThere(cards))
   }
 
   test("can figure out four of a kind") {
-    val cards = List("QH", "JS", "5H", "3C", "AD", "2C", "4C", "5C", "AC").map(x => init(x))
     val cardsWith4Kind = List("QH", "JS", "5H","QS", "QD", "3C", "AD", "QC", "2C", "4C", "5C", "AC")
       .map(x => init(x))
     assert(FourOfKind.isThere(cardsWith4Kind))
